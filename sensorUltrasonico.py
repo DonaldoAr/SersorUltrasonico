@@ -1,7 +1,7 @@
 # Libraries
 import RPi.GPIO as GPIO
 import time
-
+from Filtrar_ruido import Filtrar_ruido          # Clase Filtro
 # GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
@@ -22,6 +22,8 @@ GPIO.setup(ECHO2, GPIO.IN)
 ALARMA = 7
 GPIO.setup(ALARMA, GPIO.OUT)
 GPIO.output(ALARMA, GPIO.LOW)
+
+senal_ruido1 = Filtrar_ruido(0.32, 0.32, 0.01)
 # def distance():
 #     # set Trigger to HIGH
 #     GPIO.output(TRIGGER, True)
@@ -68,17 +70,19 @@ if(__name__ == '__main__'):
             # APAGAMOS EL ESTROBO 
             # GPIO.output(ALARMA, GPIO.LOW)
             GPIO.output(ALARMA, True)
-            time.sleep(0.5)
+            # time.sleep(0.5)
             distA = int(distance(TRIGGER1, ECHO1))
             distB = int(distance(TRIGGER2, ECHO2))
             # distA = distance(TRIGGER1, ECHO1)
             # distB = distance(TRIGGER2, ECHO2)
-            print("S1: %.1f" % distA, "S2: %.1f" % distB)
+            print("Fin: %.1f" % distA, "Ini: %.1f" % distB)
             # -> SOLO PARA MEDIR LA DISTANCIAS <-
             # print("S1: %.1f" % distA, "S2: %.1f" % distB)
             # time.sleep(0.7)
             # SI HAY UNA PERSONA EN MEDIO  
-            if((distA < 200 & distA > 10) & (distB >= 190 )):
+            
+            if((distA < 200 and distA > 10) and (distB >= 190 )):
+            # if((distA < 200)):
                 # PERSONA CAMINA
                 # ENCENDER LA ALARMA
                 while(True):
@@ -96,12 +100,12 @@ if(__name__ == '__main__'):
                         distA = int(distance(TRIGGER1, ECHO1))
                         distB = int(distance(TRIGGER2, ECHO2))
                         print("S1: %.1f" % distA, "S2: %.1f" % distB)
-                        if((distA < 200 & distA > 10) & (distB >= 190 )):
+                        if((distA < 200 and distA > 10) and (distB >= 190 )):
                             # DESACTIVAR LA ALARMA 
                             GPIO.output(ALARMA, True)
                             print("APAGAR ALARMA")
                             break
-            elif((distB < 200 & distB > 10) & (distA >= 190 )):
+            elif((distB < 200 and distB > 10) and (distA >= 190 )):
                 # ENTRA LA PERSONA
                 GPIO.output(ALARMA, True)
                 while(True):
@@ -119,24 +123,13 @@ if(__name__ == '__main__'):
                         distA = int(distance(TRIGGER1, ECHO1))
                         distB = int(distance(TRIGGER2, ECHO2))
                         print("S1: %.1f" % distA, "S2: %.1f" % distB)
-                        if((distA >= 190) & (distB >= 190 )):
+                        if((distA >= 190) and (distB >= 190 )):
                             # DESACTIVAR LA ALARMA 
                             GPIO.output(ALARMA, True)
                             print("SE APAGA")
                             break
             print("De vuelta a ciclo infinito")
-                        
-
-            
-            
-
-                
-
-
-                        
-                
-                
-            
+                                   
     # Resetiando
     except KeyboardInterrupt:
         GPIO.cleanup()
