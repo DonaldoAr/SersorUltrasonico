@@ -51,13 +51,16 @@ if(__name__ == '__main__'):
                     if( (rel1 == True) and (rel2 == False) ):
                         print("El usuario acaba de entrar a la tienda")
                         print(contador/100)
-                        # if((contador/100)> 1):{
-
-                        # }
-                        tiempoAlarma(True, 2*contador/100)
-                        print("salio de ciclo")
-                        contador = 0
-                        break
+                        if((contador/100)> 60):
+                            contador = 10
+                            tiempoAlarma(True, 10)
+                            contador = 0
+                            break
+                        else:
+                            tiempoAlarma(True, 2*contador/100)
+                            print("salio de ciclo")
+                            contador = 0
+                            break
     # Resetiando
     except KeyboardInterrupt:
         GPIO.cleanup()

@@ -51,3 +51,5 @@ class Filtrar_ruido:
 
     def getEstimateError(self):
       return _err_estimate
+
+      
